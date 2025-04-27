@@ -290,7 +290,7 @@ BEGIN {
   # If @@ is specified, but there's no -f, let's come up with a temporary input
   # file name.
 
-  trace_dir = out_dir "/.traces"
+  trace_dir = out_dir "/traces"
 
   if (!stdin_file) {
     found_atat = 0
@@ -301,7 +301,7 @@ BEGIN {
       }
     }
     if (found_atat) {
-      stdin_file = trace_dir "/.cur_input"
+      stdin_file = trace_dir "/cur_input"
     }
   }
 
@@ -455,13 +455,13 @@ BEGIN {
   #  exit 1
   #}
 
-  system(">\""in_dir"/.afl-cmin.test\"")
-  if (0 == system("ln \""in_dir"/.afl-cmin.test\" "trace_dir"/.link_test")) {
+  system(">\""in_dir"/afl-cmin.test\"")
+  if (0 == system("ln \""in_dir"/afl-cmin.test\" "trace_dir"/link_test")) {
     cp_tool = "ln"
   } else {
     cp_tool = "cp"
   }
-  system("rm -f \""in_dir"/.afl-cmin.test\"")
+  system("rm -f \""in_dir"/afl-cmin.test\"")
 
   if (!ENVIRON["AFL_SKIP_BIN_CHECK"]) {
     # Make sure that we can actually get anything out of afl-showmap before we
@@ -470,15 +470,15 @@ BEGIN {
     print "[*] Testing the target binary..."
 
     if (!stdin_file) {
-      system(AFL_MAP_SIZE "AFL_CMIN_ALLOW_ANY=1 "AFL_CMIN_CRASHES_ONLY"\""showmap"\" -m "mem_limit" -t "timeout" -o \""trace_dir"/.run_test\" -Z "extra_par" -- \""target_bin"\" "prog_args_string" <\""in_dir"/"first_file"\"")
+      system(AFL_MAP_SIZE "AFL_CMIN_ALLOW_ANY=1 "AFL_CMIN_CRASHES_ONLY"\""showmap"\" -m "mem_limit" -t "timeout" -o \""trace_dir"/run_test\" -Z "extra_par" -- \""target_bin"\" "prog_args_string" <\""in_dir"/"first_file"\"")
     } else {
       system("cp \""in_dir"/"first_file"\" "stdin_file)
-      system(AFL_MAP_SIZE "AFL_CMIN_ALLOW_ANY=1 "AFL_CMIN_CRASHES_ONLY"\""showmap"\" -m "mem_limit" -t "timeout" -o \""trace_dir"/.run_test\" -Z "extra_par" -H \""stdin_file"\" -- \""target_bin"\" "prog_args_string" </dev/null")
+      system(AFL_MAP_SIZE "AFL_CMIN_ALLOW_ANY=1 "AFL_CMIN_CRASHES_ONLY"\""showmap"\" -m "mem_limit" -t "timeout" -o \""trace_dir"/run_test\" -Z "extra_par" -H \""stdin_file"\" -- \""target_bin"\" "prog_args_string" </dev/null")
     }
 
     first_count = 0
 
-    runtest = trace_dir"/.run_test"
+    runtest = trace_dir"/run_test"
     while ((getline < runtest) > 0) {
       ++first_count
     }
@@ -514,7 +514,7 @@ BEGIN {
     }
 
     cnt = 0;
-    tmpfile=out_dir "/.filelist"
+    tmpfile=out_dir "/filelist"
     for (instance = 1; instance < threads; instance++) {
       for (i = 0; i < inputsperfile; i++) {
         print in_dir"/"infilesSmallToBigFull[cnt] >> tmpfile"."instance
@@ -621,16 +621,16 @@ BEGIN {
         if (! (key in best_file)) {
             # this is the best file for this key
             best_file[key] = fn
-#printf "BEST_FILE[%d]=\"%s\"\n",key,fn | "sort -t'[' -k2 > "trace_dir"/.candidate_script"
+#printf "BEST_FILE[%d]=\"%s\"\n",key,fn | "sort -t'[' -k2 > "trace_dir"/candidate_script"
         }
-#printf "%d %s\n",key,fn > trace_dir"/.candidate_list"
+#printf "%d %s\n",key,fn > trace_dir"/candidate_list"
     }
     close(tracefile_path)
   }
   print ""
 
   # sort keys
-  sortedKeys = trace_dir"/.all_uniq"
+  sortedKeys = trace_dir"/all_uniq"
   sortKeysCmd = "sort -k1n > "sortedKeys
   for (key in key_count) {
      printf "%7d %s\n",key_count[key],key | sortKeysCmd
@@ -668,7 +668,7 @@ BEGIN {
       system(cp_tool" \""in_dir"/"realfile"\" \""out_dir"/"fn"\"")
       file_already_copied[fn] = ""
       ++out_count
-      #printf "tuple nr %d (%d cnt=%d) -> %s\n",tcnt,key,key_count[key],fn > trace_dir"/.log"
+      #printf "tuple nr %d (%d cnt=%d) -> %s\n",tcnt,key,key_count[key],fn > trace_dir"/log"
     }
   }
   close(sortedKeys)
