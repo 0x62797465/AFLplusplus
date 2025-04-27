@@ -1423,7 +1423,7 @@ int main(int argc, char **argv_orig, char **envp) {
     }
 
     stdin_file = at_file ? strdup(at_file)
-                         : (char *)alloc_printf("%s/.afl-showmap-temp-%u",
+                         : (char *)alloc_printf("%s/afl-showmap-temp-%u",
                                                 use_dir, (u32)getpid());
     unlink(stdin_file);
 
