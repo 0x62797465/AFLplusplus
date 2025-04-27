@@ -647,7 +647,7 @@ static void set_up_environment(char **argv) {
     }
 
     fsrv.out_file =
-        alloc_printf("%s/.afl-analyze-temp-%u", use_dir, (u32)getpid());
+        alloc_printf("%s/afl-analyze-temp-%u", use_dir, (u32)getpid());
 
   }
 
